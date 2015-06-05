@@ -64,7 +64,7 @@ shinyUI(fluidPage(
           br(),
           br(),
           p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:13pt;"),
+          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
@@ -87,7 +87,7 @@ shinyUI(fluidPage(
           p(verbatimTextOutput("summaryGroup")), br(),
           br(),
           p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:13pt;"),
+          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
@@ -182,7 +182,7 @@ shinyUI(fluidPage(
           p(tags$b("Dec_secs: "), "The declination second of the cluster"),
           br(),br(), br(),
           p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:13pt;"),
+          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
@@ -234,7 +234,7 @@ shinyUI(fluidPage(
           p("The new UV Legacy Survey of the Galactic Globular Clusters (led by PI: Piotto) provides some initial, rough measurements of multiple population qualities for the clusters."),
           br(),br(), br(),
           p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:13pt;"),
+          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
