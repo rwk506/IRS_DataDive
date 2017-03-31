@@ -2,7 +2,7 @@
 # An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data
 
 (A [Shiny application](https://rwk506.shinyapps.io/datadive/)).
-<br />
+<br /><br />
 
 ### Table of Contents
 [Summary](#Summary)<br />
@@ -13,7 +13,7 @@
 
 
 <a name="Summary"/>
-### Summary
+<h3>Summary<h3 />
 
 The Shiny application is deployed on shinyapps.io and can be found [here](https://rwk506.shinyapps.io/datadive/). 
 
@@ -28,8 +28,12 @@ The Shiny app plots the amount of contributed gifts compared to the total revenu
 The user can inspect how this changes for different types of non-profit organizations (e.g.: foreign aid, public servies) as designated by NTEE codes, which can be changed from the left panel dropdown menu. Through this process, the long-term financial behavior for similar non-profits shows how the revenue model of organizations changes as those organizations age. More details available in the 'IRS Data' tab of the app.
 
 <br /><br /><br />
+
+
+
+
 <a name="Case"/>
-### Case Study Example
+<h3>Case Study Example <h3/>
 
 Imagine you are part of a youth development organization (NTEE code 'O') that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on contributions to the total revenue of your organization, perhaps making more and more revenue from programs or membership fees.
 
@@ -41,7 +45,7 @@ However, if you don't see the finances of your organization heading in that dire
 
 
 <a name="Refs"/>
-### References
+<h3>References<h3/>
 
 **Data from IRS**
 
@@ -54,6 +58,7 @@ Original data on the NPOs has been taken from the IRS Form 990 data, which is pu
 [IRS Form 990 Instructions](https://www.irs.gov/pub/irs-pdf/i990.pdf)
 
 <br />
+
 **NTEE code information**
 
 [NTEE codes](http://nccs.urban.org/classification/national-taxonomy-exempt-entities)
@@ -61,8 +66,10 @@ Original data on the NPOs has been taken from the IRS Form 990 data, which is pu
 The National Taxonomy of Exempt Entities is used by the IRS to classify non-profit organizations and facilitate collection, analysis, comparison of NPOs in a consistent manner.
 
 <br />
+
 **Additional Information**
-Additional resources that may be useful when interpreting and understanding the analysis presented here.
+
+Other resources that may be useful when interpreting and understanding the analysis presented in the app.
 
 [DataKind](http://www.datakind.org/)
 
@@ -79,7 +86,7 @@ Additional resources that may be useful when interpreting and understanding the 
 <br /> <br /><br />
 
 <a name="Other"/>
-### Other Information
+<h3>Other Information<h3/>
 
 Author: RWK <br />
 License: None. <br />
