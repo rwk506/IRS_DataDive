@@ -8,6 +8,7 @@
 [Summary](#Summary)<br />
 [Case Study](#Case)<br />
 [References](#Refs)<br />
+[What's Next?](#Next)<br />
 [Other Information](#Other)<br />
 <br /><br />
 
@@ -79,6 +80,17 @@ Other resources that may be useful when interpreting and understanding the analy
 
 [National Center for Charitable Statistics](http://nccsweb.urban.org/knowledgebase/)
 
+
+
+<br /> <br /><br />
+
+<a name="Next"/>
+<h3>What's Next?</h3>
+
+* Statistical comparison of data of organization from user to entire NTEE group
+* Including error analysis
+* Make additional financial data available
+* Allow for greater granularity in NTEE code sub-categories
 
 
 
