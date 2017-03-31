@@ -5,7 +5,7 @@ An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data
 A [Shiny application](https://rwk506.shinyapps.io/datadive/).
 <br />
 
-<h4>Table of Contents</h4>
+###Table of Contents###
 [Summary](#Summary)<br />
 [Case Study](#Case)<br />
 [References](#Refs)<br />
@@ -14,7 +14,7 @@ A [Shiny application](https://rwk506.shinyapps.io/datadive/).
 
 
 <a name="Summary"/>
-<h4>Summary</h4>
+###Summary###
 
 The Shiny application can be found [here](https://rwk506.shinyapps.io/datadive/). 
 
@@ -30,7 +30,7 @@ The user can inspect how this changes for different types of non-profit organiza
 
 <br /><br /><br />
 <a name="Case"/>
-<h4>Case Study Example:</h4>
+###Case Study Example:###
 
 Imagine you are part of a youth development organization (NTEE code 'O') that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on contributions to the total revenue of your organization, perhaps making more and more revenue from programs or membership fees.
 
@@ -42,7 +42,7 @@ However, if you don't see the finances of your organization heading in that dire
 
 
 <a name="Refs"/>
-<h4>References</h4>
+###References###
 
 ** Data from IRS **
 Source: [IRS Form 990 Data on AWS](https://aws.amazon.com/public-datasets/irs-990/)
@@ -79,7 +79,7 @@ Additional resources that may be useful when interpreting and understanding the 
 <br /> <br /><br />
 
 <a name="Other"/>
-<h4>Other Information</h4>
+###Other Information###
 
 Author: RWK <br />
 License: None. <br />
