@@ -1,11 +1,10 @@
 
-An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data
-================================
+# An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data
 
-A [Shiny application](https://rwk506.shinyapps.io/datadive/).
+(A [Shiny application](https://rwk506.shinyapps.io/datadive/)).
 <br />
 
-###Table of Contents###
+### Table of Contents
 [Summary](#Summary)<br />
 [Case Study](#Case)<br />
 [References](#Refs)<br />
@@ -14,9 +13,9 @@ A [Shiny application](https://rwk506.shinyapps.io/datadive/).
 
 
 <a name="Summary"/>
-###Summary###
+### Summary
 
-The Shiny application can be found [here](https://rwk506.shinyapps.io/datadive/). 
+The Shiny application is deployed on shinyapps.io and can be found [here](https://rwk506.shinyapps.io/datadive/). 
 
 <br />
 
@@ -30,7 +29,7 @@ The user can inspect how this changes for different types of non-profit organiza
 
 <br /><br /><br />
 <a name="Case"/>
-###Case Study Example:###
+### Case Study Example
 
 Imagine you are part of a youth development organization (NTEE code 'O') that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on contributions to the total revenue of your organization, perhaps making more and more revenue from programs or membership fees.
 
@@ -42,9 +41,10 @@ However, if you don't see the finances of your organization heading in that dire
 
 
 <a name="Refs"/>
-###References###
+### References
 
-** Data from IRS **
+**Data from IRS**
+
 Source: [IRS Form 990 Data on AWS](https://aws.amazon.com/public-datasets/irs-990/)
 
 Original data on the NPOs has been taken from the IRS Form 990 data, which is publicly available on Amazon Web Services. From an enormous effort on the part of DataKind and as part of the DataKind NYC DataDive in March 2017, this data has been cleaned and processed into its present form.
@@ -79,7 +79,7 @@ Additional resources that may be useful when interpreting and understanding the 
 <br /> <br /><br />
 
 <a name="Other"/>
-###Other Information###
+### Other Information
 
 Author: RWK <br />
 License: None. <br />
