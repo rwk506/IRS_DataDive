@@ -238,7 +238,7 @@ shinyUI(fluidPage(
           
           #### NTEE
           p(tags$b("NTEE code information")),
-          p(a("NTEE codes", href="http://adsabs.harvard.edu/abs/2010arXiv1012.3224H")),
+          p(a("NTEE codes", href="http://nccs.urban.org/classification/national-taxonomy-exempt-entities")),
           p("The National Taxonomy of Exempt Entities is used by the IRS to classify non-profit organizations and facilitate
             collection, analysis, comparison of NPOs in a consistent manner."), br(),
           

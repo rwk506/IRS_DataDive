@@ -21,7 +21,7 @@ library(ggvis)
 # totrevenue: Total reported revenue
 # also there's the NTEE/name info
 
-DF = read.csv('./taxform_short.csv', nrows = 20000)
+DF = read.csv('./taxform_short.csv')
 DF$YrsOld = 2016 - DF$FormYear
 DF$tmp = DF$totcntrbgfts/DF$totrevenue
 
