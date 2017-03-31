@@ -1,5 +1,4 @@
 library(shiny)
-library(shiny)
 library(ggplot2)
 library(ggvis)
 
@@ -7,34 +6,45 @@ library(ggvis)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("The Milky Way Globular Cluster System"),
+  titlePanel("Building a Better Revenue Model for NPOs"),
   
   # Sidebar with controls to select the variable to plot against
   # mpg and to specify whether outliers should be included
   sidebarLayout(
-    sidebarPanel(width=3,
+    sidebarPanel(width=4,
       titlePanel("Plotting"),
       
       #### select menus for x and y variables      
       selectInput("xvariable", "X axis:",
-                  names(clusts),
-                  selected="Metallicity"),
-      selectInput("yvariable", "Y axis:",
-                  names(clusts),
-                  selected = "Age_from_compilation"),
+                  (as.character(sort(na.omit(unique(DF$NTEE_topname))))),
+                  selected="ARTS, CULTURE and HUMANITIES (A)"),
+      # selectInput("yvariable", "Y axis:",
+      #             (as.character(na.omit(unique(DF$NTEE_topname)))),
+      #             selected = "YOUTH DEVELOPMENT")
       
-      #### select menu for color-grouping option
-      selectInput("Group","Color points by:",
-                  names(clusts),
-                  selected = "Absolute_Vmagnitude")  #,
-            
       #### Allow user-defined x and y boundaries?
       #numericInput("xlow", label = h3("Numeric input"), value=1),
       
       #### select whether or not to show a linear fit
-      #selectInput("radio2", "Linear Fit",
-      #           list("Off" = 0,
-      #                 "On" = 100))
+      # selectInput("radio2", "Show Fit",
+      #            list("Off" = 0,
+      #                  "On" = 100))
+      tags$hr(),
+      fileInput("file1", "Add your own!",
+                accept = c(
+                  "text/csv",
+                  "text/comma-separated-values,text/plain",
+                  ".csv")      ),
+      p(tags$b("How does your organization compare?")),
+      p("Load your own CSV file here - formatted as 'year, total_gifts, total_revenue' 
+        for each year of your filed tax return. Choose the NTEE category for your organization and see 
+        how your finances compare to similar organizations!", style = "font-size:9pt;"),
+      p("The value of 'total_gifts' is 990 Core_Pt VIII-1h(A) on the 990 form and 
+        'total_revenue' is from box 990 Core_Pt VIII-12(A).", style = "font-size:9pt;"),
+      p("For more details/an example of how to set up your data file for comparison, 
+        see the 'Your Data' tab on the right.", style = "font-size:9pt;"),
+      tags$hr()
+      #checkboxInput("header", "Header", TRUE)
     ),
     
 
@@ -43,146 +53,164 @@ shinyUI(fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel(
-          h4("Main Plot"),
-          br(), h4(tags$b("Exploring the rich dataset of the old globular clusters in our galaxy")),
-          p("This Shiny application is written in order to explore the data of Galactic Globular Clusters from Harris
-            (2010) combined with several other studies (as outlined in the 'References' tab). The user can choose an
-            X-variable to plot, a Y-variable to plot, and a variable on which to group (color) the data. A linear fit can
-            also be chosen to be computed and the results will be displayed at the bottom of the page.", br(), br(),"A summary
-            of the X, Y, and color variables is given in the 'Data Summary' tab, and descriptions of the variables are available
-            in the 'Variables' tab. Information and links to the references from which the data is derived is given in the
-            'References' tab."),
+          h4("Main"),
+          br(), h4(tags$b("How does the financial performance of your non-profit compare to similar organizations?")), br(),
+          p("This is the question we attempted to address through the examination of tax documents for hundreds
+            of thousands of non-profits who filed with the IRS in the 2015 fiscal year. By analyzing how much 
+            of a non-profit's revenue derives from contributions (as opposed to program revenue, membership
+            fees, etc.), we explore how this changes for similar non-profit organizations over time."),
+          p("In the plot below, we show the amount of contributed gifts compared to the total revenue of the non-profits over time.
+            This metric indicates how financially dependent (high ratio on y-axis) or how independent (low ratio on y-axis) 
+            an organization is likely to be on individual contributions compared to how long it has been in operation."),
           br(),
-          h4(textOutput("caption")),
+          p("The user can inspect how this changes for different types of non-profit organizations 
+            (e.g.: foreign aid, public servies) as designated by NTEE codes, which can be changed from the left panel
+            dropdown menu."),
+          p("Through this process, the long-term financial behavior for similar non-profits shows how the revenue model
+            of organizations changes as those organizations age. More details available in the 'IRS Data' tab."),
+          br(),
+          #h4(textOutput("caption")),
           ggvisOutput("ggvis"),
           uiOutput("ggvis_ui"),
-          p(textOutput("showfit")),
-          p(textOutput("showfit2")),
+          br(),
+          p("(The datafile is fairly large and may take a minute to load -- we appreciate your patience!)", style = "font-size:8pt;"),
+          #p(textOutput("showfit")),
+          #p(textOutput("showfit2")),
           #p(textOutput("xlow")),  #### print check
           #p(textOutput("opacity")),  ### just another print check, remove later
           br(),
           br(),
           br(),
-          p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
+          br(),
+          br(),
+          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:12pt;"),
+          br(),
+          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
           br(),
           br()
           ),
         
         #### Additional tab panel for more information/tables/summaries and stuff
         tabPanel(
-          h4("Data Summary"),
+          h4("IRS Data"), br(),
+          h4("An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data"),
           br(),
-          p("Please note that the linear fit is for the entire set of points, not differentiated by grouping/coloring of points. Links to
-            GitHub are at the bottom of this page."),
+          p("Below is a summary of the median ratio for each year for the selected NTEE code for organizations that
+            reported a non-zero fundraising contributions. For each organization where data is available, we use the 
+            formation year of the organization to determine how long the organization has been operating. Using the 
+            total contributed gifts reported on the IRS 990 form, we compare to the total revenue brought in by the 
+            organization. This metric allows us to examine the dependency of the organizations on contributed gifts 
+            in relation to their total revenue."),
+          p("For each age, from the newest to the oldest organizations, we plot the median ratio of contributions to 
+            revenue for each age. Through this process, we can examine how the financial business models of similar 
+            non-profits changes and evolves over the course of their existence."),
           br(),
-          p(tags$b("Plot Data Summary:"), style = "font-size:16pt;"),
-          p(textOutput("xvar")),
-          p(verbatimTextOutput("summaryX")), br(),
-          p(textOutput("yvar")),
-          p(verbatimTextOutput("summaryY")), br(),
-          p(textOutput("grp")),
-          p(verbatimTextOutput("summaryGroup")), br(),
+          p(tags$b("Plot Data Summary:"), style = "font-size:14pt;"),
+          p("Below is the data plotted 'Main' tab."),
+          dataTableOutput('table'),
+          #p(verbatimTextOutput("summaryX")), br(),br(),br(),
           br(),
-          p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
+          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          a("GitHub Page", href="https://github.com/rwk506", style = "font-size:12pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
+          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
           br(),
           br()
           ),
         
+        #### Additional tab panel for more information/tables/summaries and stuff
+        tabPanel(
+          h4("Your Data"),
+          br(),
+          p(tags$b("Incorporating data of your organization:"), style = "font-size:14pt;"),          
+          p("If you want to upload a file containing your organization's data, you may do so via the upload file option 
+            on the left panel. The information in your uploaded file should be taken from your organization's IRS Form 990
+            filings, as detailed below.",
+            "The file should be formatted preferably without a header; each line of the file should 
+            contain three comma separated values - the tax filing year, the total contributions from gifts for that 
+            fiscal year, and the total revenue of that fiscal year."),
+          p(tags$i("For example, take a file formatted as below:")),
+          p("1995, 10000, 20000"),
+          p("1998, 15000, 40000"),
+          p("2002, 32000, 80000"),
+          p("In the first row of this example, the tax filing in 1995 had $10,000 in contributed gifts and $20,000 
+            in revenue."),
+          p("The amount of contributed gifts can be found in Tax Form 990 Core document, Part VIII, Column A, 
+            Box 1h. The total revenue reported for the same year is in Part VIII, Column A, Box 12.","These are both on 
+            page 9 of the IRS 990 tax form"),
+          p("An example of a correctly formatted .csv file for an imaginary nonprofit may be downloaded here:"),
+          downloadButton('downloadData', 'Download'), br(),
+          br(),
+          p("An example tax form can be accessed ", a("here.", href="https://www.irs.gov/pub/irs-pdf/f990.pdf"),
+            "Ideally, the more tax years that you can include in your data file upload the better!", tags$b("By 
+            comparing your data to that of similar organizations, you can gain important insight into the sustainability 
+            of your organization's revenue model.")), br(),br(),
+          p(tags$b("Case Study Example:"), style = "font-size:14pt;"),
+          p("Imagine you are part of a youth development organization (NTEE code 'O') 
+            that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on 
+            contributions to the total revenue of your organization, perhaps making more and more revenue from programs
+            or membership fees."),
+          p("However, if you don't see the finances of your organization heading in that direction (and your organization
+            remains heavily dependent on individual contributions), you may want to re-examine your revenue model and 
+            consider changes that would lead to more sustainable revenue streams as your organization moves forward."),
+          br(),
+          p("If you have uploaded a file, the data (and the columns calulated for plotting) will be shown below. The first 
+            three columns are those provided by you, 'form' is the calculated years since tax filing and 'ratio' is the 
+            calculated contributions/revenue ratio."),
+          dataTableOutput('contents'),
+          br(),br(),br(),
+          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          a("GitHub Page", href="https://github.com/rwk506", style = "font-size:12pt;"),
+          br(),
+          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
+          br(),
+          br()
+          ),
+
+        
         #### Description tab for all the included variables (try to keep in order...)
         tabPanel(
-          h4("Variables"),
+          h4("NTEEs"),
           br(),
-          p("The variables available for plotting are described below."),
-          br(), br(),
-          p(tags$b("Variable Descriptions:"), style = "font-size:16pt;"),
-          p(tags$b("Name: "),"The NGC catalog name for the cluster"),
-          p(tags$b("Log_Galactocentric_Distance: "), "The (base-10) logarithm of the distance of the cluster from the Galactic center, in kpc"),
-          p(tags$b("Heliocentric_Distance: "), "The distance of the cluster from the sun's position, assuming R(sun) = 8.0 kpc"),
-          p(tags$b("Metallicity: "), "The [Fe/H] metallicity, as given in the Harris 2010 cluster catalog"),
-          p(tags$b("Reddening: "), "The measure of foreground E(B-V), the reddening of the cluster's color in the B-V plane due to dust in the line of sight"),
-          p(tags$b("Apparent_Distance_Modulus: "), "The observed apparent distance modulus to the cluster in the V band"),
-          p(tags$b("Number_of_Populations_by_eye: "), "The number of populations that the HST-based ultraviolet CMD suggests (half-integers represent uncertainty as to the number of populations)"),
-          p(tags$b("UV_Color_Spread_of_RGB: "), "A relative measurement of the observed spread of the red giant branch in the HST-based ultraviolet CMD"),
-          p(tags$b("Absolute_Vmagnitude: "), "The absolute integrated V-band magnitude of the cluster (often used as a proxy for mass)"),
-          p(tags$b("Apparent_Vmag: "), "The apparent integrated V-band magnitude of the cluster"),
-          p(tags$b("UB_color: "), "The integrated (U-B) color of the cluster"),
-          p(tags$b("BV_color: "), "The integrated (B-V) color of the cluster"),
-          p(tags$b("VR_color: "), "The integrated (V-R) color of the cluster"),
-          p(tags$b("VI_color: "), "The integrated (V-I) color of the cluster"),
-          p(tags$b("Ellipticity: "), "A measurement of the elongation of the cluster from perfectly a spherical distribution of stars"),
-          p(tags$b("Radial_Velocity: "), "Radial velocity relative to the sun, in km/s"),
-          p(tags$b("Radial_Velocity_Error: "), "Observational uncertainty in the Radial_Velocity measurement"),
-          p(tags$b("LSR_Radial_Velocity: "), "Radial velocity relative to sun's local standard of rest (LSR), in km/s"),
-          p(tags$b("Central_Sigma_V: "), "Central velocity dispersion of the cluster, in km/s"),
-          p(tags$b("Central_Sigma_V_Error: "), "Observational uncertainty in the Central_Sigma_V measurement"),
-          p(tags$b("Central_Concentration: "), "King-model central concentration, a measurement of density of the cluster"),
-          p(tags$b("Core_Radius: "), "The core radius of the cluster, measured in arcminutes"),
-          p(tags$b("Half_Light_Radius: "), "The radius including half the light of the cluster, measured in arcminutes"),
-          p(tags$b("Central_Surface_Brightness: "), "Measurement of V-band magnitudes per square arcsecond of the cluster"),
-          p(tags$b("Log_Luminosity_Density: "), "The base-10 logarithm of solar luminosities per cubic parsec of the cluster"),
-          p(tags$b("Log_Core_Relaxtime: "), "The relaxation time of the cluster, measured in base-10 logarithm of years"),
-          p(tags$b("Log_HMR_Relaxtime: "), "The half-median relaxation time of the cluster, measured in base-10 logarithm of years"),
-          p(tags$b("Age_from_compilation: "), "The age of the cluster in Gyr, as noted by the reference in Age_Reference"),
-          p(tags$b("Age_compilation_err: "), "The error in the Age_from_compilation of the cluster (if given), also in Gyr"),
-          p(tags$b("Age_Reference: "), "The reference from which Age_from_compilation and its error are reported"),
-          p(tags$b("RGB_median_color: "), "The estimated median color of the cluster's red giant branch"),
-          p(tags$b("Mean_Period_of_RRab: "), "The mean period of the RR Lyrae stars (type ab only) in the cluster, in days"),
-          p(tags$b("Number_of_RRab: "), "The number of RR Lyrae in the cluster used for the determination of Mean_Period_of_RRab"),
-          p(tags$b("Oosterhoff_Type: "), "The determined Oosterhoff Type (I, II, or III) of the cluster based on the horizontal branch"),
-          p(tags$b("Galaxy_Population: "), "The likely population of the Galaxy to which the cluster belongs; BD = Bulge/Disk, YH = Young Halo, OY = Old Halo, C = omega Centauri"),
-          p(tags$b("Horizontal_Branch_Magnitude: "), "The magnitude of the horizontal branch stars/RR Lyrae (V-band)"),
-          p(tags$b("Specific_RRLyrae_Frequency: "), "The specific frequency of the RR Lyrae stars relative to the cluster"),
-          p(tags$b("Horizontal_Branch_Ratio: "), "A measurement of the horizontal branch morphoology, determined from blue RR Lyrae (B), middle HB RR Lyrae (V), and red RR Lyrae (R): (B-R)/(B+V+R)"),
-          p(tags$b("Horizontal_Branch_Type: "), "The Dickens classification of the horizontal branch morphology, from 0 (blue) to 7 (red)"),
-          p(tags$b("FeH_Dotter2010: "), "The [Fe/H] metallicity from Dotter et al. 2010"),
-          p(tags$b("Alpha_Fe_Dotter: "), "The [alpha/Fe] enrichment of the cluster from Dotter et al. 2010"),
-          p(tags$b("Age_Dotter2010: "), "The age (in Gyr) from Dotter et al. 2010"),
-          p(tags$b("Age_err_Dotter2010: "), "The observational uncertainty in Age_Dotter2010, also in Gyr"),
-          p(tags$b("Integrated_Spectral_FeH: "), "The integrated spectral [Fe/H] metallicity from Schiavon et al. 2005"),
-          p(tags$b("Age_Roediger2014: "), "The age of the cluster (in Gyr) from Roediger et al. 2014"),
-          p(tags$b("Age_err_Roediger2014: "), "The observational uncertainty in Age_Roediger2014, also in Gyr"),
-          p(tags$b("Fe_H_Roediger2014: "), "The [Fe/H] metallicity from Roediger 2014"),
-          p(tags$b("Fe_H_Roediger2014_err: "), "The observational uncertainty in Fe_H_Roediger2014"),
-          p(tags$b("Mg_Fe: "), "A measurement of [Mg/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Mg_Fe_err: "), "The observational uncertainty of Mg_Fe"),
-          p(tags$b("C_Fe: "), "A measurement of [C/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("C_Fe_err: "), "The observational uncertainty of C_Fe"),
-          p(tags$b("N_Fe: "), "A measurement of [N/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("N_Fe_err: "), "The observational uncertainty of N_Fe"),
-          p(tags$b("Ca_Fe: "), "A measurement of [Ca/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Ca_Fe_err: "), "The observational uncertainty of Ca_Fe"),
-          p(tags$b("O_Fe: "), "A measurement of [O/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("O_Fe_err: "), "The observational uncertainty of O_Fe"),
-          p(tags$b("Na_Fe: "), "A measurement of [Na/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Na_Fe_err: "), "The observational uncertainty of Na_Fe"),
-          p(tags$b("Si_Fe: "), "A measurement of [Si/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Si_Fe_err: "), "The observational uncertainty of Si_Fe"),
-          p(tags$b("Cr_Fe: "), "A measurement of [Cr/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Cr_Fe_err: "), "The observational uncertainty of Cr_Fe"),
-          p(tags$b("Ti_Fe: "), "A measurement of [Ti/Fe] for a subset of stars in the cluster from Roediger et al. 2014"),
-          p(tags$b("Ti_Fe_err: "), "The observational uncertainty of Ti_Fe"),
-          p(tags$b("Longitude: "), "The Galactic longitude of the cluster, in degrees"),
-          p(tags$b("Latitude: "), "The Galactic latitude of the cluster, in degrees"),
-          p(tags$b("X: "), "The X position of the cluster from the Galactic center, in kpc"),
-          p(tags$b("Y: "), "The Y position of the cluster from the Galactic center, in kpc"),
-          p(tags$b("Z: "), "The Z position of the cluster from the Galactic center, in kpc"),
-          p(tags$b("R.A.: "), "The right ascension of the cluster in decimal degrees"),
-          p(tags$b("Dec: "), "The declination of the cluster in decimal degrees"),
-          p(tags$b("RA_hour: "), "The RA hour of the cluster"),
-          p(tags$b("RA_mins: "), "The RA minute of the cluster"),
-          p(tags$b("RA_secs: "), "The RA second of the cluster"),
-          p(tags$b("Dec_deg: "), "The declination degree of the cluster"),
-          p(tags$b("Dec_mins: "), "The declination minute of the cluster"),
-          p(tags$b("Dec_secs: "), "The declination second of the cluster"),
-          br(),br(), br(),
-          p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
+          p("The various NTEE codes are described below and further information is available via ", 
+          a("this link", href="http://nccs.urban.org/classification/national-taxonomy-exempt-entities"), "."),
+          br(),
+          br(),
+          p(tags$b("NTEE Codes and Descriptions:"), style = "font-size:16pt;"),
+          p(tags$b("D"),": ANIMAL-RELATED"),
+          p(tags$b("A"),": ARTS, CULTURE and HUMANITIES"),
+          p(tags$b("R"),": CIVIL RIGHTS, SOCIAL ACTION and ADVOCACY"),
+          p(tags$b("S"),": COMMUNITY IMPROVEMENT and CAPACITY BUILDING"),
+          p(tags$b("I"),": CRIME and LEGAL-RELATED"),
+          p(tags$b("G"),": DISEASES, DISORDERS and MEDICAL DISCIPLINES"),
+          p(tags$b("B"),": EDUCATION"),
+          p(tags$b("J"),": EMPLOYMENT"),
+          p(tags$b("C"),": ENVIRONMENT"),
+          p(tags$b("K"),": FOOD, AGRICULTURE and NUTRITION"),
+          p(tags$b("E"),": HEALTH CARE"),
+          p(tags$b("L"),": HOUSING and SHELTER"),
+          p(tags$b("P"),": HUMAN SERVICES"),
+          p(tags$b("Q"),": INTERNATIONAL, FOREIGN AFFAIRS and NATIONAL SECURITY"),
+          p(tags$b("H"),": MEDICAL RESEARCH"),
+          p(tags$b("F"),": MENTAL HEALTH and CRISIS INTERVENTION"),
+          p(tags$b("Y"),": MUTUAL and MEMBERSHIP BENEFIT"),
+          p(tags$b("T"),": PHILANTHROPY, VOLUNTARISM and GRANTMAKING FOUNDATIONS"),
+          p(tags$b("M"),": PUBLIC SAFETY, DISASTER PREPAREDNESS and RELIEF"),
+          p(tags$b("W"),": PUBLIC and SOCIETAL BENEFIT"),
+          p(tags$b("N"),": RECREATION and SPORTS"),
+          p(tags$b("X"),": RELIGION-RELATED"),
+          p(tags$b("U"),": SCIENCE and TECHNOLOGY"),
+          p(tags$b("V"),": SOCIAL SCIENCE"),
+          p(tags$b("Z"),": UNKNOWN"),
+          p(tags$b("O"),": YOUTH DEVELOPMENT"),
+          br(),
+          p("There are additional subcategories for many of the above NTEE codes. While these subcategories are not
+            presently included in the analysis, they may be provided upon request."),
+          br(), br(), br(),
+          p(tags$b("Other analysis projects:"), style = "font-size:16pt;"),
+          a("GitHub Page", href="https://github.com/rwk506", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
@@ -197,44 +225,36 @@ shinyUI(fluidPage(
           br(), br(),
           p(tags$b("References:"), style = "font-size:16pt;"),
           br(),
-          #### Harris
-          p(tags$b("Harris 2010 Galactic Globular Cluster Catalog")),
-          p(a("A New Catalog of Globular Clusters in the Milky Way", href="http://adsabs.harvard.edu/abs/2010arXiv1012.3224H"),
-            (": Harris, W. E. 1996, AJ, 112, 1487—. 2010, ArXiv e-prints, arXiv:1012.3224")),
-          p("The Harris 2010 catalog is by far the primary source for most of the information included."), br(),
           
-          #### Catelan
-          p(tags$b("Catelan 2009")), 
-          p(a("Horizontal branch stars: the interplay between observations and theory, and insights into the formation of the Galaxy", href="http://adsabs.harvard.edu/abs/2009Ap%26SS.320..261C"),
-            (": Catelan, M. 2009, Ap & SS, 320, 261")),
-          p("This reference provides the main source of information related to the horizontal branch mean period and Oosterhoff groups."), br(),
+          #### DATA
+          p(tags$b("Data from IRS")), 
+          p("Source: ", a("IRS Form 990 Data on AWS", href="https://aws.amazon.com/public-datasets/irs-990/")),
+          p("Original data on the NPOs has been taken from the IRS Form 990 data, which is publicly available on Amazon
+            Web Services. From an enormous effort on the part of DataKind and as part of the DataKind NYC DataDive in 
+            March 2017, this data has been cleaned and processed into its present form."), 
+          p(a("IRS Form 990 Example", href="https://www.irs.gov/pub/irs-pdf/f990.pdf")),
+          p(a("IRS Form 990 Instructions", href="https://www.irs.gov/pub/irs-pdf/i990.pdf")),
+          br(),
           
-          #### Dotter
-          p(tags$b("Dotter et al. 2010")), 
-          p(a("The ACS Survey of Galactic Globular Clusters. IX. Horizontal Branch Morphology and the Second Parameter Phenomenon", href="http://adsabs.harvard.edu/abs/2010ApJ...708..698D"),
-            (": Dotter, A., Sarajedini, A., Anderson, J., et al. 2010, ApJ, 708, 698")),
-          p("The Dotter et al. 2010 paper provides some age and HB information for comparison purposes."), br(),
+          #### NTEE
+          p(tags$b("NTEE code information")),
+          p(a("NTEE codes", href="http://adsabs.harvard.edu/abs/2010arXiv1012.3224H")),
+          p("The National Taxonomy of Exempt Entities is used by the IRS to classify non-profit organizations and facilitate
+            collection, analysis, comparison of NPOs in a consistent manner."), br(),
           
-          #### Schiavon
-          p(tags$b("Schiavon et al. 2005")), 
-          p(a("A Library of Integrated Spectra of Galactic Globular Clusters", href="http://adsabs.harvard.edu/abs/2005ApJS..160..163S"),
-            (": Schiavon, R. P., Rose, J. A., Courteau, S., MacArthur, L. A. 2005, ApJS, 160, 163")),
-          p("The library of integrated cluster spectra provides the highly accurate spectral [Fe/H] measurements included for many of the clusters."), br(),
-          
-          #### Roediger
-          p(tags$b("Roediger et al. 2014")), 
-          p(a("Constraining Stellar Population Models. I. Age, Metallicity and Abundance Pattern Compilation for Galactic Globular Clusters", href="http://adsabs.harvard.edu/abs/2014ApJS..210...10R"),
-            (": Roediger, J. C., Courteau, S., Graves, G., & Schiavon, R. P. 2014, ApJS, 210, 10")),
-          p("This source also provide ages and [Fe/H] measurements, but also measurements of individual elemental abundances for some other clusters, from a compilation of previous studies."), br(),
-          
-          #### UV Piotto
-          p(tags$b("HST UV Legacy survey")), 
-          p(a("The Hubble Space Telescope UV Legacy Survey of Galactic Globular Clusters. I. Overview of the Project and Detection of Multiple Stellar Populations", href="http://adsabs.harvard.edu/abs/2015AJ....149...91P"),
-            (": Piotto, G., Milone, A. P., Bedin, L. R., et al. 2015, AJ, 149, 91")),
-          p("The new UV Legacy Survey of the Galactic Globular Clusters (led by PI: Piotto) provides some initial, rough measurements of multiple population qualities for the clusters."),
-          br(),br(), br(),
-          p(tags$b("Links:"), style = "font-size:16pt;"),
-          a("GitHub Page", href="https://github.com/rwk506/GalacticGlobularClusters", style = "font-size:13pt;"),
+          #### Additional Information
+          p(tags$b("Additional Information")), 
+          p("Additional resources that may be useful when interpreting and understanding the analysis presented here."), 
+          p(a("DataKind", href="http://www.datakind.org/")),
+          p(a("DataKind NYC DataDive", href="https://www.eventbrite.com/e/givingtuesday-datadive-presented-by-92y-datakind-and-the-bill-melinda-gates-foundation-registration-29290486634?utm_campaign=order_confirmation_email&utm_medium=email&ref=eemailordconf&utm_source=eb_email&utm_term=eventname#")),
+          p(a("Tax Form 990 Wiki", href="https://en.wikipedia.org/wiki/Form_990")),
+          p(a("National Center for Charitable Statistics", href="http://nccsweb.urban.org/knowledgebase/")),
+          br(),
+          br(),
+          br(), 
+          br(),
+          p(tags$b("Other analysis projects:"), style = "font-size:16pt;"),
+          a("GitHub Page", href="https://github.com/rwk506", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Galactic Globular Clusters
 ================================
 
@@ -85,3 +86,7 @@ Author: RWK <br />
 License: None. <br />
 Contact: May be made through GitHub. Please contact if you intend to use for public/academic purposes. Also contact if any application issues arise. <br />
 
+=======
+# IRS_DataDive
+An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data
+>>>>>>> a2e97c7ceea6cc92dfece5a883ddb3e0530ba735
