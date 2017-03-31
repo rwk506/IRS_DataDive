@@ -13,7 +13,7 @@
 
 
 <a name="Summary"/>
-<h3>Summary<h3/>
+<h3>Summary</h3>
 
 The Shiny application is deployed on shinyapps.io and can be found [here](https://rwk506.shinyapps.io/datadive/). 
 
@@ -33,7 +33,7 @@ The user can inspect how this changes for different types of non-profit organiza
 
 
 <a name="Case"/>
-<h3>Case Study Example <h3/>
+<h3>Case Study Example</h3>
 
 Imagine you are part of a youth development organization (NTEE code 'O') that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on contributions to the total revenue of your organization, perhaps making more and more revenue from programs or membership fees.
 
@@ -45,7 +45,7 @@ However, if you don't see the finances of your organization heading in that dire
 
 
 <a name="Refs"/>
-<h3>References<h3/>
+<h3>References</h3>
 
 **Data from IRS**
 
@@ -86,7 +86,7 @@ Other resources that may be useful when interpreting and understanding the analy
 <br /> <br /><br />
 
 <a name="Other"/>
-<h3>Other Information<h3/>
+<h3>Other Information</h3>
 
 Author: RWK <br />
 License: None. <br />
