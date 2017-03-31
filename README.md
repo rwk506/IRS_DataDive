@@ -13,7 +13,7 @@
 
 
 <a name="Summary"/>
-<h3>Summary<h3 />
+<h3>Summary<h3/>
 
 The Shiny application is deployed on shinyapps.io and can be found [here](https://rwk506.shinyapps.io/datadive/). 
 
