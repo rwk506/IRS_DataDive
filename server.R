@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(ggvis)
+library(dtw)
 
 
 #### load in data table, merged from all datasets
@@ -55,7 +56,7 @@ shinyServer(function(input, output) {
       # 'size', 'type', and 'datapath' columns. The 'datapath' column will contain the local filenames where the data can
       # be found.
       inFile <- input$file1
-      if (is.null(inFile))
+      if (is.null(inFile)) ### check if file is loaded by user
         return(NULL)
       USERdata = read.csv(inFile$datapath)#, header = input$header)
       
@@ -63,12 +64,10 @@ shinyServer(function(input, output) {
       USERdata$form = 2016 - USERdata$yr
       USERdata$ratio = USERdata$totcontrib/USERdata$totrev
       
-      
-      USERdata
+      USERdata  ### output table back to server
     })
   
   output$contents <- renderDataTable({ userData() })
-  
   
   
   #### Render the plot!
@@ -97,6 +96,12 @@ shinyServer(function(input, output) {
     output$table <- renderDataTable(MEDS, 
                     options = list(pageLength = 25))#, initComplete = I("function(settings, json) {alert('Done.');}")))
                                     
+    output$corrl <- renderText({      
+      if(is.null(userData())) return(NULL)
+      Combined = merge(userData(), MEDS, by.x = c('form'), by.y = c('year'))
+      cor(Combined$ratio, Combined$med, method = "pearson")
+    })
+
     ## Using ggvis, set plot with layers, model, and hover text
     p1 = MEDS %>% ggvis(~year, ~med)  %>%
       #### do linear model first so it doesn't block out the hover info for the points
@@ -104,7 +109,7 @@ shinyServer(function(input, output) {
       add_axis("x", title = 'Age of Organization') %>% 
       add_axis("y", title = 'Ratio - Donated Contributions to Total Revenue') %>%
       scale_numeric("x", domain = c(0, 120), nice = FALSE, clamp = TRUE) %>%
-      scale_numeric("y", domain = c(0, 1), nice = FALSE, clamp = TRUE) %>%
+      scale_numeric("y", domain = c(0, 1.), nice = FALSE, clamp = TRUE) %>%
       #### plot the points, with fancy hover aesthetics
       layer_points(fill:='blue', fillOpacity := 0.75, fillOpacity.hover := 0.35) %>%
       # add_legend("fill", title = as.character(grouping())) %>%

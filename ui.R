@@ -3,20 +3,21 @@ library(ggplot2)
 library(ggvis)
 
 # Define UI
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = "bootstrap.css",
   
   # Application title
-  titlePanel("Building a Better Revenue Model for NPOs"),
+  titlePanel( h2("Building a Better Revenue Model for NPOs: Planning for the Future", style = "color:#B22222"), windowTitle = "Revenue Models for Non-Profits"),
   
   # Sidebar with controls to select the variable to plot against
   # mpg and to specify whether outliers should be included
   sidebarLayout(
     sidebarPanel(width=4,
-      titlePanel("Plotting"),
+      #titlePanel("Plot Options"),
       
       #### select menus for x and y variables      
-      selectInput("xvariable", "X axis:",
-                  (as.character(sort(na.omit(unique(DF$NTEE_topname))))),
+      selectInput("xvariable", "NTEE Category:",
+                  #c("A","B","C")),
+                  as.character(sort(unique(DF$NTEE_topname))),
                   selected="ARTS, CULTURE and HUMANITIES (A)"),
       # selectInput("yvariable", "Y axis:",
       #             (as.character(na.omit(unique(DF$NTEE_topname)))),
@@ -29,19 +30,21 @@ shinyUI(fluidPage(
       # selectInput("radio2", "Show Fit",
       #            list("Off" = 0,
       #                  "On" = 100))
+      
       tags$hr(),
-      fileInput("file1", "Add your own!",
+      p(tags$b("How does your organization compare?")),
+      p("Load your own CSV file* here to see 
+        how your finances compare to similar organizations!", style = "font-size:11pt;"),
+      fileInput("file1","",
                 accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
                   ".csv")      ),
-      p(tags$b("How does your organization compare?")),
-      p("Load your own CSV file here - formatted as 'year, total_gifts, total_revenue' 
-        for each year of your filed tax return. Choose the NTEE category for your organization and see 
-        how your finances compare to similar organizations!", style = "font-size:9pt;"),
-      p("The value of 'total_gifts' is 990 Core_Pt VIII-1h(A) on the 990 form and 
-        'total_revenue' is from box 990 Core_Pt VIII-12(A).", style = "font-size:9pt;"),
-      p("For more details/an example of how to set up your data file for comparison, 
+      # p("...  - formatted as 'year, total_gifts, total_revenue' 
+      #   for each year of your filed tax return. Choose the NTEE category for your organization and...
+      #   The value of 'total_gifts' is 990 Core_Pt VIII-1h(A) on the 990 form and 
+      #   'total_revenue' is from box 990 Core_Pt VIII-12(A).", style = "font-size:9pt;"),
+      p("*For more details/an example of how to format and upload your organization's data for comparison, 
         see the 'Your Data' tab on the right.", style = "font-size:9pt;"),
       tags$hr()
       #checkboxInput("header", "Header", TRUE)
@@ -54,40 +57,45 @@ shinyUI(fluidPage(
       tabsetPanel(
         tabPanel(
           h4("Main"),
-          br(), h4(tags$b("How does the financial performance of your non-profit compare to similar organizations?")), br(),
-          p("This is the question we attempted to address through the examination of tax documents for hundreds
+          br(), h4(tags$b("How does the revenue model of your non-profit compare to similar organizations?")), br(),
+          p("We can explore this question through the examination of tax documents for hundreds
             of thousands of non-profits who filed with the IRS in the 2015 fiscal year. By analyzing how much 
-            of a non-profit's revenue derives from contributions (as opposed to program revenue, membership
-            fees, etc.), we explore how this changes for similar non-profit organizations over time."),
-          p("In the plot below, we show the amount of contributed gifts compared to the total revenue of the non-profits over time.
+            of a non-profit's revenue derives from donor contributions (as opposed to program revenue, membership
+            fees, etc.), we can examine how the revenue model changes for similar non-profit organizations over time."),
+          p("In the plot below, the amount of contributed gifts is compared to the total revenue of the non-profits to observe 
+            trends as organizations age.
             This metric indicates how financially dependent (high ratio on y-axis) or how independent (low ratio on y-axis) 
             an organization is likely to be on individual contributions compared to how long it has been in operation."),
           br(),
-          p("The user can inspect how this changes for different types of non-profit organizations 
-            (e.g.: foreign aid, public servies) as designated by NTEE codes, which can be changed from the left panel
-            dropdown menu."),
-          p("Through this process, the long-term financial behavior for similar non-profits shows how the revenue model
-            of organizations changes as those organizations age. More details available in the 'IRS Data' tab."),
-          br(),
-          #h4(textOutput("caption")),
           ggvisOutput("ggvis"),
           uiOutput("ggvis_ui"),
           br(),
           p("(The datafile is fairly large and may take a minute to load -- we appreciate your patience!)", style = "font-size:8pt;"),
-          #p(textOutput("showfit")),
-          #p(textOutput("showfit2")),
-          #p(textOutput("xlow")),  #### print check
-          #p(textOutput("opacity")),  ### just another print check, remove later
+          br(),
+          br(),
+          h4(tags$b("Did you upload your own data?")),
+          p("If you've uploaded your organization's data, it should appear in the above plot in green. A visual inspection 
+            will provide some idea if your organization is more or less dependent on individual donations than average for
+            the NTEE category chosen."),
+          p("A numerical similarity measure between -1 and 1 is provided below -", tags$b("what does your data say?"), br(),
+          p(tags$b("Similarity measure: "), textOutput("corrl")),
+          tags$i(" --  Is your value close to 1?"), " Then your organization has a similar revenue model to the organizations of the NTEE category chosen",br(),
+          tags$i(" --  Is your value close to 0?"), " Your revenue model is not similar to the NTEE category displayed - your organization 
+                  may be over-reliant or under-reliant on individual donations. You may want to consider options and plan what 
+                  long-term sources of revenue are best for your NPO.", br(),
+          tags$i(" --  Is your value close to -1?"), " Your revenue model defies all expectations! This", tags$i(" may "), "be a good thing, but consider re-evaluating
+                  how your organization compares to similar organizations and what the long-term goals of your organization are."),
+          br(),
+          p("One can use this applet to inspect how non-profit organization revenue models differ over time/age for various types of NPOs 
+            (e.g.: foreign aid, public servies) as designated by NTEE codes, which can be changed from the left panel
+            dropdown menu. More details available in the 'IRS Data' tab."),
           br(),
           br(),
           br(),
-          br(),
-          br(),
-          br(),
-          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          h4(tags$b("Other analysis projects:")),
           a("GitHub Page", href="https://github.com/rwk506/", style = "font-size:12pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
+          a("Webpage", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
           br(),
           br()
           ),
@@ -95,7 +103,7 @@ shinyUI(fluidPage(
         #### Additional tab panel for more information/tables/summaries and stuff
         tabPanel(
           h4("IRS Data"), br(),
-          h4("An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data"),
+          h4(tags$b("An Analysis of Non-Profit Organization Revenue Models Using IRS Form 990 Data")),
           br(),
           p("Below is a summary of the median ratio for each year for the selected NTEE code for organizations that
             reported a non-zero fundraising contributions. For each organization where data is available, we use the 
@@ -107,15 +115,14 @@ shinyUI(fluidPage(
             revenue for each age. Through this process, we can examine how the financial business models of similar 
             non-profits changes and evolves over the course of their existence."),
           br(),
-          p(tags$b("Plot Data Summary:"), style = "font-size:14pt;"),
+          h4(tags$b("IRS Data Summary:")),
           p("Below is the data plotted 'Main' tab."),
           dataTableOutput('table'),
-          #p(verbatimTextOutput("summaryX")), br(),br(),br(),
           br(),
-          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          h4(tags$b("Other analysis projects:")),
           a("GitHub Page", href="https://github.com/rwk506", style = "font-size:12pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
+          a("Webpage", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
           br(),
           br()
           ),
@@ -124,30 +131,31 @@ shinyUI(fluidPage(
         tabPanel(
           h4("Your Data"),
           br(),
-          p(tags$b("Incorporating data of your organization:"), style = "font-size:14pt;"),          
+          h4(tags$b("Formatting and Uploading Your Data:")),
           p("If you want to upload a file containing your organization's data, you may do so via the upload file option 
             on the left panel. The information in your uploaded file should be taken from your organization's IRS Form 990
             filings, as detailed below.",
-            "The file should be formatted preferably without a header; each line of the file should 
-            contain three comma separated values - the tax filing year, the total contributions from gifts for that 
+            "The file should be formatted preferably without a header; each line of the plain text file (e.g.: notepad or textedit) 
+            should contain three comma separated values - the tax filing year, the total contributions from gifts for that 
             fiscal year, and the total revenue of that fiscal year."),
-          p(tags$i("For example, take a file formatted as below:")),
-          p("1995, 10000, 20000"),
-          p("1998, 15000, 40000"),
-          p("2002, 32000, 80000"),
+          p(tags$b("For example, take a file formatted as below:"), br(), 
+            "1995, 10000, 20000", br(), "1998, 15000, 40000", br() ,"2002, 32000, 80000"),
           p("In the first row of this example, the tax filing in 1995 had $10,000 in contributed gifts and $20,000 
             in revenue."),
-          p("The amount of contributed gifts can be found in Tax Form 990 Core document, Part VIII, Column A, 
-            Box 1h. The total revenue reported for the same year is in Part VIII, Column A, Box 12.","These are both on 
-            page 9 of the IRS 990 tax form"),
-          p("An example of a correctly formatted .csv file for an imaginary nonprofit may be downloaded here:"),
+          p(tags$b("The values for columns 2 and 3 can be extracted from your organization's tax filings in IRS Form 990 Core document."), br(),
+            tags$i("Column 2:")," amount of contributed gifts - Part VIII, Column A,Box 1h.", br(),
+            tags$i("Column 3:")," total revenue reported - Part VIII, Column A, Box 12.", br(),
+            "(These are both on page 9 of the 2015 version of the IRS 990 tax form; note that the format of this form may have 
+            changed over time and older tax years may have these values in different locations on the IRS 990 form.)"),
+          br(),
+          p(tags$b("An example of a correctly formatted .csv file for an imaginary nonprofit may be downloaded here:")),
           downloadButton('downloadData', 'Download'), br(),
           br(),
           p("An example tax form can be accessed ", a("here.", href="https://www.irs.gov/pub/irs-pdf/f990.pdf"),
             "Ideally, the more tax years that you can include in your data file upload the better!", tags$b("By 
             comparing your data to that of similar organizations, you can gain important insight into the sustainability 
             of your organization's revenue model.")), br(),br(),
-          p(tags$b("Case Study Example:"), style = "font-size:14pt;"),
+          h4(tags$b("Case Study Example:")),
           p("Imagine you are part of a youth development organization (NTEE code 'O') 
             that has been in operation for 20 years. Presently, you may be seeing a decrease in your reliance on 
             contributions to the total revenue of your organization, perhaps making more and more revenue from programs
@@ -161,10 +169,10 @@ shinyUI(fluidPage(
             calculated contributions/revenue ratio."),
           dataTableOutput('contents'),
           br(),br(),br(),
-          p(tags$b("Other analysis projects:"), style = "font-size:14pt;"),
+          h4(tags$b("Other analysis projects:")),
           a("GitHub Page", href="https://github.com/rwk506", style = "font-size:12pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
+          a("Webpage", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:12pt;"),  #style = "font-family: 'times'"
           br(),
           br()
           ),
@@ -178,7 +186,7 @@ shinyUI(fluidPage(
           a("this link", href="http://nccs.urban.org/classification/national-taxonomy-exempt-entities"), "."),
           br(),
           br(),
-          p(tags$b("NTEE Codes and Descriptions:"), style = "font-size:16pt;"),
+          h4(tags$b("NTEE Codes and Descriptions:")),
           p(tags$b("D"),": ANIMAL-RELATED"),
           p(tags$b("A"),": ARTS, CULTURE and HUMANITIES"),
           p(tags$b("R"),": CIVIL RIGHTS, SOCIAL ACTION and ADVOCACY"),
@@ -209,7 +217,7 @@ shinyUI(fluidPage(
           p("There are additional subcategories for many of the above NTEE codes. While these subcategories are not
             presently included in the analysis, they may be provided upon request."),
           br(), br(), br(),
-          p(tags$b("Other analysis projects:"), style = "font-size:16pt;"),
+          h4(tags$b("Other analysis projects:")),
           a("GitHub Page", href="https://github.com/rwk506", style = "font-size:13pt;"),
           br(),
           a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
@@ -222,8 +230,8 @@ shinyUI(fluidPage(
           h4("References"),
           br(),
           p("The references from which the available data are compiled are listed, linked, and briefly described below."),
-          br(), br(),
-          p(tags$b("References:"), style = "font-size:16pt;"),
+          br(),
+          h4(tags$b("References:")),
           br(),
           
           #### DATA
@@ -253,10 +261,10 @@ shinyUI(fluidPage(
           br(),
           br(), 
           br(),
-          p(tags$b("Other analysis projects:"), style = "font-size:16pt;"),
+          h4(tags$b("Other analysis projects:")),
           a("GitHub Page", href="https://github.com/rwk506", style = "font-size:13pt;"),
           br(),
-          a("Personal/Academic Page", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
+          a("Webpage", href="http://www.astro.ufl.edu/~rawagnerkaiser/Home.html", style = "font-size:13pt;"),  #style = "font-family: 'times'"
           br(),
           br()
         )
